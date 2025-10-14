@@ -1,0 +1,28 @@
+#######################################
+# Syntax Coloring Map For Rover Library
+#######################################
+
+#######################################
+# Class
+#######################################
+DualDCMotorRover	KEYWORD1
+SteerDCMotorDriveRover	KEYWORD1
+SteerServoDriveRover	KEYWORD1
+RoverBase	KEYWORD1
+
+#######################################
+# Methods and Functions
+#######################################
+begin	KEYWORD2
+setSpeed	KEYWORD2
+front	KEYWORD2
+back	KEYWORD2
+right	KEYWORD2
+left	KEYWORD2
+stop	KEYWORD2
+setSteerCenter	KEYWORD2
+setSteerRange	KEYWORD2
+
+#######################################
+# Constants (none defined yet)
+#######################################
