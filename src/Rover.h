@@ -14,7 +14,8 @@
 // =========================================================
 class RoverBase {
 public:
-    virtual void begin() = 0;
+    virtual void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1) = 0;
+    virtual void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1, uint8_t modePin) = 0;
     virtual void front() = 0;
     virtual void front(int speed) = 0;
     virtual void back() = 0;
@@ -30,9 +31,11 @@ public:
 // =========================================================
 class DualDCMotorRover : public RoverBase {
 public:
-    DualDCMotorRover(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1);
+    DualDCMotorRover();
 
-    void begin() override;
+    void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1) override;
+    void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1, uint8_t modePin) override;
+
     void setSpeed(int speed) override;
     void front() override;
     void front(int speed) override;
@@ -43,8 +46,7 @@ public:
     void stop() override;
 
 private:
-    bool _mode;
-    uint8_t _e0, _p0, _e1, _p1;
+    Drv8835Class _drv;
     int _speed;
 };
 
@@ -53,9 +55,11 @@ private:
 // =========================================================
 class SteerDCMotorDriveRover : public RoverBase {
 public:
-    SteerDCMotorDriveRover(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1);
+    SteerDCMotorDriveRover();
 
-    void begin() override;
+    void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1) override;
+    void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1, uint8_t modePin) override;
+
     void setSpeed(int speed) override;
     void front() override;
     void front(int speed) override;
@@ -66,8 +70,7 @@ public:
     void stop() override;
 
 private:
-    bool _mode;
-    uint8_t _e0, _p0, _e1, _p1;
+    Drv8835Class _drv;
     int _speed;
 };
 
@@ -76,10 +79,14 @@ private:
 // =========================================================
 class SteerServoDriveRover : public RoverBase {
 public:
-    SteerServoDriveRover(bool mode, uint8_t e0, uint8_t p0, uint8_t servoPin);
+    SteerServoDriveRover();
 
-    void begin() override;
+    void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t servoPin);
+    void begin(bool mode, uint8_t e0, uint8_t p0, uint8_t modePin, uint8_t servoPin);
+
     void setSpeed(int speed) override;
+    void setSteerCenter(int center);
+    void setSteerRange(int range);
     void front() override;
     void front(int speed) override;
     void back() override;
@@ -88,16 +95,11 @@ public:
     void left() override;
     void stop() override;
 
-    // ステアリング設定
-    void setSteerCenter(int center);
-    void setSteerRange(int range);
-
 private:
-    bool _mode;
-    uint8_t _e0, _p0;
-    uint8_t _servoPin;
+    Drv8835Class _drv;
     Servo _servo;
     int _speed;
     int _center;
     int _range;
+    uint8_t _servoPin;
 };

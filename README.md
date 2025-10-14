@@ -1,6 +1,6 @@
 # Rover Library
 
-**Rover** is a simple Arduino library for controlling three types of rovers using the **DRV8835 motor driver** and **Servo**:
+**Rover** is a simple Arduino library for controlling three types of rovers using the **DRV8835 motor driver** and **Servo**.
 
 - `DualDCMotorRover`: Differential drive rover (2 DC motors)
 - `SteerDCMotorDriveRover`: Rover with DC motor drive + DC motor steering
@@ -10,11 +10,12 @@
 
 ## Features
 
-- Control forward, backward, left, right, and stop
-- Set speed (0–100%)
-- For servo steering, set center and range
-- Single DRV8835 instance to control 1 or 2 motors
-- Easy to integrate into Arduino sketches
+- Unified API for forward, backward, left, right, and stop
+- Adjustable speed (0–100%)
+- Optional MODE pin supported in `begin()`
+- Servo steering supports adjustable center and range
+- Uses a single DRV8835 instance for all motor control
+- Easy integration with Arduino sketches
 
 ---
 
@@ -40,10 +41,12 @@ git clone https://github.com/Interested-In-Spresense/Rover.git
 ```cpp
 #include "Rover.h"
 
-DualDCMotorRover rover(true, 3, 4, 5, 6);
+DualDCMotorRover rover;
 
 void setup() {
-  rover.begin();
+  // mode=true (EN/PH mode), e0,p0,e1,p1,modePin(optional)
+  rover.begin(true, 3, 4, 5, 6, 7);
+  // rover.begin(true, 3, 4, 5, 6); // without MODE pin
   rover.setSpeed(80);
 }
 
@@ -66,10 +69,10 @@ void loop() {
 ```cpp
 #include "Rover.h"
 
-SteerDCMotorDriveRover rover(true, 3, 4, 5, 6);
+SteerDCMotorDriveRover rover;
 
 void setup() {
-  rover.begin();
+  rover.begin(true, 3, 4, 5, 6, 7); // MODE pin optional
   rover.setSpeed(80);
 }
 
@@ -92,10 +95,12 @@ void loop() {
 ```cpp
 #include "Rover.h"
 
-SteerServoDriveRover rover(true, 3, 4, 9); // Servo pin 9
+SteerServoDriveRover rover;
 
 void setup() {
-  rover.begin();
+  // mode=true (EN/PH mode), e0,p0,(modePin optional), servoPin
+  rover.begin(true, 3, 4, 7, 9); // with MODE pin
+  // rover.begin(true, 3, 4, 9); // without MODE pin
   rover.setSpeed(80);
   rover.setSteerCenter(90);
   rover.setSteerRange(30);
