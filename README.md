@@ -12,10 +12,16 @@
 
 - Unified API for forward, backward, left, right, and stop
 - Adjustable speed (0–100%)
+- Unified initialization using `begin()` for all rover types
 - Optional MODE pin supported in `begin()`
 - Servo steering supports adjustable center and range
 - Uses a single DRV8835 instance for all motor control
 - Easy integration with Arduino sketches
+
+> **Note:**
+> `DualDCMotorRover` internally maintains a motion state (`front`, `back`, `stop`)
+> to provide consistent turning behavior.
+> Steering-based rovers do not require internal state management.
 
 ---
 
@@ -44,51 +50,78 @@ git clone https://github.com/Interested-In-Spresense/Rover.git
 DualDCMotorRover rover;
 
 void setup() {
-  // mode=true (EN/PH mode), e0,p0,e1,p1,modePin(optional)
-  rover.begin(true, 3, 4, 5, 6, 7);
-  // rover.begin(true, 3, 4, 5, 6); // without MODE pin
+  // with MODE pin
+  rover.begin(true, 6, 12, 9, 13, 2);
   rover.setSpeed(80);
 }
 
 void loop() {
+
   rover.front();
   delay(1000);
-  rover.back();
-  delay(1000);
-  rover.left();
-  delay(500);
   rover.right();
   delay(500);
+  rover.left();
+  delay(500);
+
+  rover.back();
+  delay(1000);
+  rover.right();
+  delay(500);
+  rover.left();
+  delay(500);
+
   rover.stop();
   delay(1000);
+
+  rover.right();
+  delay(500);
+  rover.left();
+  delay(500);
+
 }
+
 ```
+
+---
 
 ### 2. SteerDCMotorDriveRover
 
 ```cpp
 #include "Rover.h"
 
+// ch0: drive motor, ch1: steering motor
 SteerDCMotorDriveRover rover;
 
 void setup() {
-  rover.begin(true, 3, 4, 5, 6, 7); // MODE pin optional
+  // MODE pin not used in this example
+  rover.begin(true, 3, 4, 5, 6);
   rover.setSpeed(80);
 }
 
 void loop() {
+
   rover.front();
   delay(1000);
+  rover.right();
+  delay(500);
+  rover.left();
+  delay(500);
+
   rover.back();
   delay(1000);
   rover.right();
   delay(500);
   rover.left();
   delay(500);
+
   rover.stop();
   delay(1000);
+
 }
 ```
+
+---
 
 ### 3. SteerServoDriveRover
 
@@ -100,7 +133,7 @@ SteerServoDriveRover rover;
 void setup() {
   // mode=true (EN/PH mode), e0,p0,(modePin optional), servoPin
   rover.begin(true, 3, 4, 7, 9); // with MODE pin
-  // rover.begin(true, 3, 4, 9); // without MODE pin
+  // rover.begin(true, 3, 4, 9);  // without MODE pin
   rover.setSpeed(80);
   rover.setSteerCenter(90);
   rover.setSteerRange(30);
@@ -109,15 +142,22 @@ void setup() {
 void loop() {
   rover.front();
   delay(1000);
+  rover.right();
+  delay(500);
+  rover.left();
+  delay(500);
+
   rover.back();
   delay(1000);
   rover.right();
   delay(500);
   rover.left();
   delay(500);
+
   rover.stop();
   delay(1000);
 }
+
 ```
 
 ---
@@ -134,4 +174,3 @@ rover.setSteerRange(25);  // Sets maximum left/right angle
 ## License
 
 This library is licensed under the **MIT License**.
-
