@@ -74,6 +74,16 @@ void DualDCMotorRover::left() {
     }
 }
 
+void DualDCMotorRover::center() {
+    if(_state == STATE_FRONT){
+        front();
+    } else if(_state == STATE_BACK){
+        back();
+    } else {
+        stop();
+    }
+}
+
 void DualDCMotorRover::stop() {
     Drv8835.stop(0);
     Drv8835.stop(1);
@@ -124,6 +134,10 @@ void SteerDCMotorDriveRover::right() {
 
 void SteerDCMotorDriveRover::left() {
     Drv8835.back(1, _speed);   // steering left
+}
+
+void SteerDCMotorDriveRover::center() {
+    Drv8835.stop(1);  // steering center
 }
 
 void SteerDCMotorDriveRover::stop() {
@@ -190,6 +204,10 @@ void SteerServoDriveRover::right() {
 
 void SteerServoDriveRover::left() {
     _servo.write(_center - _range);
+}
+
+void SteerServoDriveRover::center() {
+    _servo.write(_center );
 }
 
 void SteerServoDriveRover::stop() {

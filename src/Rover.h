@@ -22,6 +22,7 @@ public:
     virtual void back(int speed) = 0;
     virtual void right() = 0;
     virtual void left() = 0;
+    virtual void center() = 0;
     virtual void stop() = 0;
     virtual void setSpeed(int speed) = 0;
 };
@@ -43,6 +44,7 @@ public:
     void back(int speed) override;
     void right() override;
     void left() override;
+    void center() override;
     void stop() override;
 
 private:
@@ -71,6 +73,7 @@ public:
     void back(int speed) override;
     void right() override;
     void left() override;
+    void center() override;
     void stop() override;
 
 private:
@@ -98,6 +101,7 @@ public:
     void back(int speed) override;
     void right() override;
     void left() override;
+    void center() override;
     void stop() override;
 
 private:
