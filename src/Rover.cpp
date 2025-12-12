@@ -6,11 +6,13 @@
 
 #include "Rover.h"
 
+extern Drv8835Class Drv8835;
+
 // =========================================================
 // DualDCMotorRover
 // =========================================================
-
-DualDCMotorRover::DualDCMotorRover() : _speed(100) {}
+DualDCMotorRover::DualDCMotorRover()
+    : _speed(100), _state(STATE_STOP) {}
 
 void DualDCMotorRover::begin(bool mode, uint8_t e0, uint8_t p0, uint8_t e1, uint8_t p1) {
     Drv8835.begin(mode, e0, p0, e1, p1);
@@ -26,35 +28,56 @@ void DualDCMotorRover::setSpeed(int speed) {
 
 void DualDCMotorRover::front() {
     front(_speed);
+    _state = STATE_FRONT;
 }
 
 void DualDCMotorRover::front(int speed) {
     Drv8835.front(0, speed);
     Drv8835.front(1, speed);
+    _state = STATE_FRONT;
 }
 
 void DualDCMotorRover::back() {
     back(_speed);
+    _state = STATE_BACK;
 }
 
 void DualDCMotorRover::back(int speed) {
     Drv8835.back(0, speed);
     Drv8835.back(1, speed);
+    _state = STATE_BACK;
 }
 
 void DualDCMotorRover::right() {
-    Drv8835.front(0, _speed);
-    Drv8835.back(1, _speed);
+    if(_state == STATE_FRONT){
+        Drv8835.front(0, _speed);
+        Drv8835.front(1, _speed/3);
+    } else if(_state == STATE_BACK){
+        Drv8835.back(0, _speed/3);
+        Drv8835.back(1, _speed);
+    } else {
+        Drv8835.front(0, _speed);
+        Drv8835.back(1, _speed);
+    }
 }
 
 void DualDCMotorRover::left() {
-    Drv8835.back(0, _speed);
-    Drv8835.front(1, _speed);
+    if(_state == STATE_FRONT){
+        Drv8835.front(0, _speed/3);
+        Drv8835.front(1, _speed);
+    } else if(_state == STATE_BACK){
+        Drv8835.back(0, _speed);
+        Drv8835.back(1, _speed/3);
+    } else {
+        Drv8835.back(0, _speed);
+        Drv8835.front(1, _speed);
+    }
 }
 
 void DualDCMotorRover::stop() {
     Drv8835.stop(0);
     Drv8835.stop(1);
+    _state = STATE_STOP;
 }
 
 // =========================================================
@@ -116,7 +139,7 @@ SteerServoDriveRover::SteerServoDriveRover()
     : _speed(100), _center(90), _range(30), _servoPin(255) {}
 
 void SteerServoDriveRover::begin(bool mode, uint8_t e0, uint8_t p0, uint8_t servoPin) {
-    Drv8835.begin(mode, e0, p0, 0, 0); // Use ch0.
+    Drv8835.begin(mode, e0, p0, 0, 0);  // ch1–¢Žg—p
     _servoPin = servoPin;
     _servo.attach(_servoPin);
     _servo.write(_center);

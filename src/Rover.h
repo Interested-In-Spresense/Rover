@@ -48,6 +48,10 @@ public:
 private:
     Drv8835Class _drv;
     int _speed;
+
+    enum MotionState { STATE_STOP, STATE_FRONT, STATE_BACK };
+    MotionState _state;
+
 };
 
 // =========================================================
@@ -72,6 +76,7 @@ public:
 private:
     Drv8835Class _drv;
     int _speed;
+
 };
 
 // =========================================================
